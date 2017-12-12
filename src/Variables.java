@@ -1,72 +1,88 @@
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * 
+ * Opens menu for user to store variables that can be used in equations
  * @author Josh Klein
- *
  */
 public class Variables extends JPanel implements ActionListener{
 
-	/*
-	 *Long variables intended to store values that user chooses 
+	/**
+	 * xVar- stores value of x variable
+	 * yVar- stores value of y variable
+	 * zVar- stores value of z variable
+	 * nVar- stores value of n variable
+	 * tVar- stores value of t variable
+	 * aVar- stores value of a variable
 	 */
-	private static long xVar;
-	public long yVar = 0;
-	public long zVar = 0;
-	public long nVar = 0;
-	public long tVar = 0;
-	public long aVar = 0;
-	public long[] vars = {xVar, yVar, zVar, nVar, tVar, aVar};//Array meant to be looped through to save values. Not otherwise accessed
+	public static double xVar, yVar, zVar, nVar, tVar, aVar;
 	
-	/*
-	 * Labels mark text fields. Inform users which field operates on which variable
+	/**
+	 * vars- Double array containing variables, looped through to save values
 	 */
-	private JLabel xLabel = new JLabel("x =");
-	private JLabel yLabel = new JLabel("y =");
-	private JLabel zLabel = new JLabel("z =");
-	private JLabel nLabel = new JLabel("n =");
-	private JLabel tLabel = new JLabel("t =");
-	private JLabel aLabel = new JLabel("a =");
+	public static double[] vars = {xVar, yVar, zVar, nVar, tVar, aVar};
 	
-	/*
-	 * Text field initialization. Default to 0; will return 0 if user inputs no values
-	 * or clears values
+	/**
+	 * xLabel- Marks field used for storing value in xVar
+	 * yLabel- Marks field used for storing value in yVar
+	 * zLabel- Marks field used for storing value in zVar
+	 * nLabel- Marks field used for storing value in nVar
+	 * tLabel- Marks field used for storing value in tVar
+	 * aLabel- Marks field used for storing value in aVar
 	 */
-	private JTextField xTF = new JTextField("0");
-	private JTextField yTF = new JTextField("0");
-	private JTextField zTF = new JTextField("0");
-	private JTextField nTF = new JTextField("0");
-	private JTextField tTF = new JTextField("0");
-	private JTextField aTF = new JTextField("0");
-	private JTextField[] fields = {xTF, yTF, zTF, nTF, tTF, aTF};//Array meant to loop through to save field text. Not otherwise accessed
+	private JLabel xLabel = new JLabel("x ="), yLabel = new JLabel("y ="), zLabel = new JLabel("z ="),
+			nLabel = new JLabel("n ="), tLabel = new JLabel("t ="), aLabel = new JLabel("a =");
 	
-	/*
-	 * Buttons for saving and clearing values
+	/**
+	 * xTF- Text field that displays values currently stored in xVar
+	 * yTF- Text field that displays values currently stored in yVar
+	 * zTF- Text field that displays values currently stored in zVar
+	 * nTF- Text field that displays values currently stored in nVar
+	 * tTF- Text field that displays values currently stored in tVar
+	 * aTF- Text field that displays values currently stored in aVar
 	 */
-	private JButton OK = new JButton("OK");	
-	private JButton Clear = new JButton("Clear");
+	private JTextField xTF = new JTextField("0"), yTF = new JTextField("0"), zTF = new JTextField("0"),
+			nTF = new JTextField("0"), tTF = new JTextField("0"), aTF = new JTextField("0");
 	
-	/*
-	 * Panels that get added to the window. varPanel hold JLabels and JTextFields;
-	 * buttonPanel holds OK and Clear buttons
+	/**
+	 * fields- JTextField array containing variable values, looped through to save values
 	 */
-	private JPanel varPanel = new JPanel(new GridLayout(2,6));
-	private JPanel buttonPanel = new JPanel(new GridLayout(2,0));
+	private JTextField[] fields = {xTF, yTF, zTF, nTF, tTF, aTF};
 	
-	private static JFrame window;//Display window
+	/**
+	 * OK- Saves values and hides window
+	 * Clear- Wipes all values and returns text fields to default
+	 */
+	private JButton OK = new JButton("OK"), Clear = new JButton("Clear");
 	
+	/**
+	 * varPanel- Holds variable labels and text fields
+	 * buttonPanel - Holds OK and Clear buttons
+	 */
+	private JPanel varPanel = new JPanel(new GridLayout(2,6)), buttonPanel = new JPanel(new GridLayout(2,0));
+	
+	/**
+	 * window- JDialog holding variable menu
+	 */
+	private static JDialog window;
+	
+	/**
+	 * Variables- Constructor for setting up window
+	 */
 	public Variables() {
-		super(new BorderLayout());
+		
+		//Window given layout
+		super(new GridLayout(2,0));
 		
 		//Labels and fields added to varPanel
 		varPanel.add(xLabel);
@@ -82,9 +98,7 @@ public class Variables extends JPanel implements ActionListener{
 		varPanel.add(aLabel);
 		varPanel.add(aTF);
 		
-		/*
-		 * Buttons receive ActionCommands and ActionListeners, then added to buttonPanel
-		 */
+		//Buttons receive ActionCommands and ActionListeners, then added to buttonPanel
 		OK.setActionCommand("OK");
 		Clear.setActionCommand("Clear");
 		OK.addActionListener(this);
@@ -92,36 +106,26 @@ public class Variables extends JPanel implements ActionListener{
 		buttonPanel.add(OK);
 		buttonPanel.add(Clear);
 		
-		/*
-		 * Panels added to window
-		 */
-		add(varPanel, BorderLayout.NORTH);
-		add(buttonPanel, BorderLayout.SOUTH);
+		//Panels added to window
+		add(varPanel);
+		add(buttonPanel);
 	}
 
+	/**
+	 * actionPerformed- Saves values and hides window or clears all values
+	 * @param e- Action received from button press
+	 */
 	public void actionPerformed(ActionEvent e) {
 		
-		/*
-		 * OK is pressed, values are saved based on text fields, and window becomes invisible
-		 */
-		//TODO Make values actually save
+		//OK is pressed, values are saved based on text fields, and window becomes invisible
 		if (e.getActionCommand().equals("OK")) {
 			for (int i = 0; i < vars.length; i++) {
-				vars[i] = Long.parseLong(fields[i].getText());
+				vars[i] = Double.parseDouble(fields[i].getText());
 				window.setVisible(false);
 			}
 		}
 		
-		//Test case for only xVar
-		/*if (e.getActionCommand().equals("OK") && !xTF.getText().equals("0")) {
-			xVar = Long.parseLong(xTF.getText());
-			System.out.println(xVar);
-			window.setVisible(false);
-		}*/
-		
-		/*
-		 * Clear is pressed, values become 0, and text field set ot default
-		 */
+		//Clear is pressed, values become 0, and text field set to default
 		else if (e.getActionCommand().equals("Clear")){
 			for (int i = 0; i < vars.length; i++) {
 				vars[i] = 0;
@@ -130,23 +134,27 @@ public class Variables extends JPanel implements ActionListener{
 		}
 	}	
 	
-	/*
-	 * Window is initialized, but hidden. Made visible when VAR key in CalcWindow.java is pressed
+	/**
+	 * createWindow- Sets up window and attributes of window
 	 */
 	private static void createWindow() {
-		window = new JFrame("Variables");
+		window = new JDialog(window, "Variables");
 		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		window.setModal(true);
 		
 		JComponent newContentPane = new Variables();
 		newContentPane.setOpaque(true);
 		window.setContentPane(newContentPane);
 		
+		window.setResizable(false);
+		window.setAlwaysOnTop(true);
+		window.setModalityType(ModalityType.APPLICATION_MODAL);
 		window.pack();
 		window.setVisible(false);
 	}
 	
-	/*
-	 * Runs class
+	/**
+	 * main- Called in CalcWindow, allows windows creation
 	 */
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -156,17 +164,10 @@ public class Variables extends JPanel implements ActionListener{
 		});
 	}
 	
-	/*
-	 * Makes Variable window visible, called when VAR key in CalcWindow.java is pressed
+	/**
+	 * makeVisible- window is set to be visible
 	 */
 	public static void makeVisible () {
 		window.setVisible(true);
-	}
-	
-	/*
-	 * Returns xVar value
-	 */
-	public long getXVal() {
-		return xVar;
 	}
 }
